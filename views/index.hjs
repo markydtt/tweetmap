@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="http://localhost:3000/routes/index.js"></script>
+    <script type="text/javascript">
+    	console.log(mark);
+    </script>
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <p>Welcome to {{ title }}</p>
+    Oh and hey {{ tweet }}!
+
+    {{ data }}
+  </body>
+</html>
