@@ -1,13 +1,12 @@
-
 /*
  * GET home page.
  */
 
 var mark = 'lol';
 var twitter = require('ntwitter');
-var io = require('socket.io').listen(3001, {log: false});
+var io = require('socket.io').listen(3000, {log: false});
 
-// nTwitter setup
+// nTwitter setup with our API credentials
 var twit = new twitter({
 	consumer_key: 'nhyw1Ec3dkl0eSgPwWhw',
 	consumer_secret: 'Mo3iRPMNjmVqBN3kpVcr5P2F3AWuCVGjJxuFIqZRmjs',
@@ -25,8 +24,9 @@ twit
     }
 );
 
-
+// Setup a live stream from Twitter with a filter
 twit.stream('statuses/filter', 
+	// The terms we want to track (Will be user input)
 	{track: ['yolo','swag','gta', 'fuck']},
 	function(stream) {
   stream.on('data', function (data) {
@@ -39,8 +39,10 @@ twit.stream('statuses/filter',
 
 
 
+
+
 exports.index = function(req, res){
-  res.render('index', { title: 'Express', tweet : 'mark' });
+  res.render('index', { title: 'TweetMap'});
 };
 
 

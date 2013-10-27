@@ -3,16 +3,58 @@
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script type="text/javascript" src="http://localhost:3000/routes/index.js"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA82fkcehl9NoHlieeEPe6VW2aybOt-DWs&sensor=false"></script>
     <script type="text/javascript">
-    	console.log(mark);
+    var map;
+    // Get the map setup with our map-canvas div
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(-34.397, 150.644),
+          zoom: 3,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+
+    	// Get socket.io connected and emitting tweets
+    	var socket = io.connect('http://localhost:3000');
+		  socket.on('newTwitt', function (data) {
+        
+        // Setup some variables for each tweet to make life easier
+        var lat = data.geo.coordinates[0];
+        var lng = data.geo.coordinates[1];
+        var name = data.user.name;
+        var screen_name = data.user.screen_name;
+        var tweetText = data.text;
+
+        // Get our div and output the tweet, with a link to the user who posted it  
+  			document.getElementById('Coords').innerHTML+= "<strong> New Tweet posted by "+ name + " (@<a href='http://twitter.com/"+screen_name+"'>"+screen_name+"</a>)" +": </strong>" + tweetText + "<br/>";
+      	// Post a marker for each new tweet
+        var myLatlng = new google.maps.LatLng(lat,lng);
+        var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title: 'Hello World!'              
+        });
+        // move our map to focus on the new tweet
+        var newFocus = new google.maps.LatLng(lat,lng);
+        map.setCenter(newFocus);
+      });
+    		
+
+
+  		
     </script>
   </head>
   <body>
+  	<div id="map-canvas"></div>
     <h1>{{ title }}</h1>
     <p>Welcome to {{ title }}</p>
-    Oh and hey {{ tweet }}!
-
-    {{ data }}
+    <div id="Coords">
+    </div>
   </body>
 </html>
