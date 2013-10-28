@@ -23,13 +23,14 @@
     	// Get socket.io connected and emitting tweets
     	var socket = io.connect('http://localhost:3000');
 		  socket.on('newTwitt', function (data) {
-        
+        console.log(data);
         // Setup some variables for each tweet to make life easier
         var lat = data.geo.coordinates[0];
         var lng = data.geo.coordinates[1];
         var name = data.user.name;
         var screen_name = data.user.screen_name;
         var tweetText = data.text;
+        var displayPicture = data.user.profile_image_url;
 
         // Get our div and output the tweet, with a link to the user who posted it  
   			document.getElementById('Coords').innerHTML+= "<strong> New Tweet posted by "+ name + " (@<a href='http://twitter.com/"+screen_name+"'>"+screen_name+"</a>)" +": </strong>" + tweetText + "<br/>";
@@ -40,10 +41,20 @@
                 map: map,
                 title: 'Hello World!'              
         });
+        // Creating an info window with the tweet content
+        var contentString = "<img class='displaypic' src='" + displayPicture + "'><strong>@" + screen_name + "</strong>: " + tweetText;
+        // Assign content to the window
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        // Open the tweet info window
+        infowindow.open(map,marker);
+
         // move our map to focus on the new tweet
         var newFocus = new google.maps.LatLng(lat,lng);
         map.setCenter(newFocus);
-      });
+        });
     		
 
 

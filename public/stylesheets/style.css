@@ -14,5 +14,15 @@ body {
   padding: 0;
 }
 #map-canvas {
-  height: 50%;
+  height: 70%;
+}
+div.infowindow {
+  color: blue;
+}
+.gm-style-iw {
+  color: blue;
+  max-width: 200px;
+}
+.displaypic {
+  vertical-align: middle;
 }
