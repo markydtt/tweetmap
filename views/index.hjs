@@ -6,12 +6,14 @@
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA82fkcehl9NoHlieeEPe6VW2aybOt-DWs&sensor=false"></script>
     <script type="text/javascript">
+    // Declare map variable here for to keep inside scope
     var map;
+
     // Get the map setup with our map-canvas div
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 3,
+          zoom: 4,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -32,8 +34,6 @@
         var tweetText = data.text;
         var displayPicture = data.user.profile_image_url;
 
-        // Get our div and output the tweet, with a link to the user who posted it  
-  			document.getElementById('Coords').innerHTML+= "<strong> New Tweet posted by "+ name + " (@<a href='http://twitter.com/"+screen_name+"'>"+screen_name+"</a>)" +": </strong>" + tweetText + "<br/>";
       	// Post a marker for each new tweet
         var myLatlng = new google.maps.LatLng(lat,lng);
         var marker = new google.maps.Marker({
@@ -41,6 +41,7 @@
                 map: map,
                 title: 'Hello World!'              
         });
+
         // Creating an info window with the tweet content
         var contentString = "<img class='displaypic' src='" + displayPicture + "'><strong>@" + screen_name + "</strong>: " + tweetText;
         // Assign content to the window
@@ -53,7 +54,7 @@
 
         // move our map to focus on the new tweet
         var newFocus = new google.maps.LatLng(lat,lng);
-        map.setCenter(newFocus);
+          map.setCenter(newFocus);
         });
     		
 
@@ -63,9 +64,35 @@
   </head>
   <body>
   	<div id="map-canvas"></div>
-    <h1>{{ title }}</h1>
-    <p>Welcome to {{ title }}</p>
-    <div id="Coords">
+
+    <!--- Search Form -->
+    <div id="form">
+      Keywords: <input type="text"></input>
+      Location: <input type="text"></input>
+      <button type="submit">Search!</button>
     </div>
+    <!--- existing keywords -->
+    <div id="keywords">
+      Active Keywords:
+      <ul>
+        <li>Swag <a href="#">Remove</a></li> 
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+        <li>Swag</li>
+
+      </ul>
+    </div>
+
+    
   </body>
 </html>
