@@ -34,7 +34,8 @@ div.infowindow {
   background-color: grey;
   padding: 5px;
 }
-#keywords {
+#keywordDisplay {
+  visibility: hidden;
   position: absolute;
   bottom: 30px;
   left: 10px;
