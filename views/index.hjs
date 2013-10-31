@@ -3,10 +3,8 @@
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="/scripts/controllers.js"></script>
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA82fkcehl9NoHlieeEPe6VW2aybOt-DWs&sensor=false"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular.min.js"></script>
     <script type="text/javascript">
 
     // Declare map variable here for to keep inside scope
@@ -64,11 +62,11 @@
 
 
 
-        // Create a counter variable
-        var i = 0;
         // Create the empty keyword array
         var keywords = new Array();
         function showKeywords(){
+            var data = '';
+
             document.getElementById('keywordDisplay').style.visibility = "visible";
             var locationInput = document.getElementById('locationSearch').value;            
             var keywordInput = document.getElementById('keywordSearch').value
@@ -79,16 +77,30 @@
             newkeywords = keywordInput.split(' ');
             // Append all keywords into the original array
             keywords = keywords.concat(newkeywords);
+            
+            // Iterate through the array and add the keywords to the display
+            // also remove any empty keywords
+            words.innerHTML = '';
+            for (var i = 0; i < keywords.length; i++){
+              // Remove any additional spaces that a user may have entered
+              if (keywords[i] == " " | keywords[i] == ""){
+                 keywords.splice(i, 1);
+              }
+              // Create an <li> and remove link for each keyword
+              else {
+                 words.innerHTML+=  "<li>" + keywords[i] + " <a href=''>[Remove]</a></li>";
+              }               
+            }
+            // Clear the textbox so users can enter more keywords
+            document.getElementById('keywordSearch').value = '';
             console.log(keywords);
-
-
 
         }
 
   		
     </script>
   </head>
-  <body ng-controller="MainCtrl">
+  <body>
   	<div id="map-canvas"></div>
 
     <!--- Search Form -->
@@ -98,10 +110,9 @@
       <input type="submit" onclick="showKeywords()" value="Search!">
     </div>
     <!--- existing keywords -->
-    <div ng-controller="keyCtrl" id="keywordDisplay">
+    <div id="keywordDisplay">
       Active Keywords:
       <ul id="words">
-        <li ng-repeat="">
       </ul>
     </div>
 

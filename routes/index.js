@@ -2,9 +2,26 @@
  * GET home page.
  */
 
-var mark = 'lol';
 var twitter = require('ntwitter');
 var io = require('socket.io').listen(3000, {log: false});
+
+/// TESTING SOCKET.IO HERE
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// TO HERE
+
+
 
 // nTwitter setup with our API credentials
 var twit = new twitter({
@@ -37,13 +54,13 @@ twit.stream('statuses/filter',
   });
 });
 
-
-
-
-
 exports.index = function(req, res){
   res.render('index', { title: 'TweetMap'});
 };
+
+
+
+
 
 
 
