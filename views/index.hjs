@@ -23,6 +23,10 @@
       <ul id="words">
       </ul>
     </div>
+    <!--- alert display -->
+    <div id="alert">
+      
+    </div>
 
     
   </body>
