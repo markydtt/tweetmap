@@ -4,11 +4,13 @@ function keyCtrl(){
 
 function MainCtrl($scope){
 	$scope.filter = new Array();
+    $scope.keywords = new Array();
 
-// Create a counter variable
+
+        // Create a counter variable
         var i = 0;
         // Create the empty keyword array
-        var keywords = new Array();
+        keywords = new Array();
         $scope.showKeywords = function(){
             document.getElementById('keywordDisplay').style.visibility = "visible";
             var locationInput = document.getElementById('locationSearch').value;            
@@ -19,10 +21,8 @@ function MainCtrl($scope){
             // Separate the keywords 
             newkeywords = keywordInput.split(' ');
             // Append all keywords into the original array
-            keywords = keywords.concat(newkeywords);
-            console.log(keywords);
-
-
+            $scope.keywords = keywords.concat(newkeywords);
+            console.log($scope.keywords)
 
         }
 

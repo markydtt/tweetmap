@@ -79,10 +79,10 @@
       <input type="submit" ng-click="showKeywords()" value="Search!">
     </div>
     <!--- existing keywords -->
-    <div ng-controller="keyCtrl" id="keywordDisplay" ng-show"filter.length">
+    <div id="keywordDisplay" ng-show"filter.length">
       Active Keywords:
-      <ul id="words">
-        <li ng-repeat="">
+      <ul id="words" ng-repeat="word in keywords">
+        <li>{{word}}</li>
       </ul>
     </div>
 
