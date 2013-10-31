@@ -69,7 +69,15 @@
 
             document.getElementById('keywordDisplay').style.visibility = "visible";
             var locationInput = document.getElementById('locationSearch').value;            
-            var keywordInput = document.getElementById('keywordSearch').value
+            var keywordInput = document.getElementById('keywordSearch').value;
+
+            socket.emit('getTweets', keywordInput);
+
+
+
+
+
+
             var wordList = document.getElementById('words');
             // create second array for the new keywords
             var newkeywords = new Array();
