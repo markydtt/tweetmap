@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="tweetmap" ng-controller="MainCtrl">
+  <head>
+    <title>Tweetmap!</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA82fkcehl9NoHlieeEPe6VW2aybOt-DWs&libraries=geometry&sensor=false&language=en"></script>
+    <script type="text/javascript" src="/javascripts/scripts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0-rc.3/angular-route.min.js"></script>
+    <script src="/javascripts/tweetmap.js"></script>
+    <script src="/javascripts/services.js"></script>
+    <script src="/javascripts/controllers.js"></script>
+  </head>
+  <body>
+    <!-- Map Display -->
+    <div id="map-canvas"></div>
+
+    <!-- Search Form -->
+    <div id="form">
+      Keywords: <input type="text" id="keywordSearch" ng-model="keywordInput" required></input>
+      Location: <input type="text" id="locationSearch"></input>
+      <input type="submit" ng-click="addKeywords()" value="Search!">
+    </div>
+    <!-- existing keywords -->
+    <div id="keywordDisplay" ng-show="keyWords.length">
+      Active Keywords:
+      <ul>
+        <li ng-repeat="word in keyWords">{{word}} <a ng-click="removeKeyword(word)">[Remove]</a></li>
+      </ul>
+    </div>
+    <!-- alert display -->
+    <div id="alert">
+    </div>
+  </body>
+</html>

@@ -35,7 +35,6 @@ div.infowindow {
   padding: 5px;
 }
 #keywordDisplay {
-  visibility: hidden;
   position: absolute;
   bottom: 30px;
   left: 10px;
