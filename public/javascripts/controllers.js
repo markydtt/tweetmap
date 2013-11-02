@@ -75,9 +75,9 @@ function MainCtrl($rootScope, $scope, socket){
 }
 
 function remove(arr, item) {
-      for(var i = arr.length; i--;) {
-          if(arr[i] === item) {
-              arr.splice(i, 1);
-          }
-      }
+  for(var i = arr.length; i--;) {
+    if(arr[i] === item) {
+        arr.splice(i, 1);
+    }
   }
+}
