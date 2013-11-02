@@ -1,9 +1,12 @@
+
+var wordList = document.getElementById('words');
 // Declare map variable here for to keep inside scope
 var map;
 // Create the empty keyword array
 var keywords = new Array();
 
 var badKeywords = "<h2>Error!</h2> Please make sure that you have entered at least one keyword";
+var badLocation = "<h2>Error!</h2> Please ensure that you've entered a valid location!"
 
 // Get the map setup with our map-canvas div
 function initialize() {
@@ -30,27 +33,30 @@ socket.on('newTwitt', function (data) {
     var tweetText = data.text;
     var displayPicture = data.user.profile_image_url;
 
-    // Post a marker for each new tweet
-    var myLatlng = new google.maps.LatLng(lat, lng);
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        title: 'Hello World!'
-    });
+    // Check each tweet is near our location
+    if (checkRadius(lat, lng)){
 
-    // Creating an info window with the tweet content
-    var contentString = "<img class='displaypic' src='" + displayPicture + "'><strong>@" + screen_name + "</strong>: " + tweetText;
-    // Assign content to the window
-    var infowindow = new google.maps.InfoWindow({
-        content: contentString
-    });
+        // Post a marker for each new tweet
+        var myLatlng = new google.maps.LatLng(lat, lng);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+        });
 
-    // Open the tweet info window
-    infowindow.open(map, marker);
+        // Creating an info window with the tweet content
+        var contentString = "<img class='displaypic' src='" + displayPicture + "'><strong>@" + screen_name + "</strong>: " + tweetText;
+        // Assign content to the window
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
 
-    // move our map to focus on the new tweet
-    var newFocus = new google.maps.LatLng(lat, lng);
-    map.setCenter(newFocus);
+        // Open the tweet info window
+        infowindow.open(map, marker);
+
+        // move our map to focus on the new tweet
+        var newFocus = new google.maps.LatLng(lat, lng);
+        map.setCenter(newFocus);
+    }
 });
 
 
@@ -64,11 +70,7 @@ socket.on('newTwitt', function (data) {
 */
 function showKeywords() {
     var data = '';
-
-
-    var locationInput = document.getElementById('locationSearch').value;
     var keywordInput = document.getElementById('keywordSearch').value;
-    var wordList = document.getElementById('words');
 
     if (keywordInput == '' | keywordInput == null){
       document.getElementById('alert').style.visibility = "visible";
@@ -107,4 +109,42 @@ function showKeywords() {
 
     console.log(keywords);
 
+}
+
+function getLocation(){
+    geocoder = new google.maps.Geocoder();
+    var locationInput = document.getElementById('locationSearch').value;
+    geocoder.geocode( { 'address': locationInput}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      document.getElementById('alert').style.visibility = "hidden";
+      map.setCenter(results[0].geometry.location);
+    } else {
+      document.getElementById('alert').style.visibility = "visible";
+      document.getElementById('alert').innerHTML = badLocation;
+    }
+  });   
+}
+
+function checkRadius(lat, lng){
+    // import geocoder
+    geocoder = new google.maps.Geocoder();
+    var locationInput = document.getElementById('locationSearch').value;
+    geocoder.geocode( { 'address': locationInput}, function(results, status){
+       
+       var searchedLat = results[0].geometry.location.lb;
+       var searchedLng = results[0].geometry.location.mb;
+
+       // LatLng object for the search
+       var searchedLocation = new google.maps.LatLng(searchedLat,searchedLng); 
+       var tweetLocation = new google.maps.LatLng(lat,lng); 
+       console.log('lat: ' + searchedLat + ' lng: ' + searchedLng + ' and... ' + lat + ',  ' + lng);
+       // computeDistanceBetween returns distance in metres - so 100km = 100,000m
+       if (google.maps.geometry.spherical.computeDistanceBetween(searchedLocation, tweetLocation) <= 100000){
+            return true;
+       }
+       else{
+            return false;
+       }
+       console.log(google.maps.geometry.spherical.computeDistanceBetween(searchedLocation, tweetLocation));
+    });
 }

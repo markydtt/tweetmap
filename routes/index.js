@@ -5,10 +5,6 @@
 var twitter = require('ntwitter');
 var io = require('socket.io').listen(3000, {log: false});
 
-/// TESTING SOCKET.IO HERE
-
-
-
 
 io.sockets.on('connection', function(socket){
   
@@ -30,7 +26,7 @@ io.sockets.on('connection', function(socket){
         }
     );
   
-    twit.stream('statuses/filter', 
+    twit.stream('statuses/filter',
       // The terms we want to track (Will be user input)
       {track: [data]},
       function(stream) {
@@ -46,10 +42,6 @@ io.sockets.on('connection', function(socket){
 });
 
 
-
-
-
-/// TO HERE
 
 exports.index = function(req, res){
   res.render('index', { title: 'TweetMap'});
