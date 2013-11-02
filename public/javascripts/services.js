@@ -1,7 +1,7 @@
 var services = angular.module('tweetmap', ['ngResource']);
 
 services.factory('socket', function ($rootScope) {
-  var socket = io.connect().on('3001');
+  var socket = io.connect();
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {
