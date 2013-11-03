@@ -1,6 +1,7 @@
 function MainCtrl($rootScope, $scope, socket){
   $scope.keywordInput = "";
   $scope.keyWords = new Array();
+  $scope.count = 0;
 
   socket.on('newTwitt', function (data) {
 
@@ -11,6 +12,18 @@ function MainCtrl($rootScope, $scope, socket){
     var screen_name = data.user.screen_name;
     var tweetText = data.text;
     var displayPicture = data.user.profile_image_url;
+
+    var contains = false;
+    for (i in $scope.keyWords) {
+      var reg = new RegExp($scope.keyWords[i], "i");
+      if (tweetText.search(reg) != -1){
+        contains = true;
+        console.log($scope.count++);
+      };
+    };
+    if (!contains){
+      return
+    };
 
     // Post a marker for each new tweet
     var myLatlng = new google.maps.LatLng(lat, lng);
@@ -53,24 +66,30 @@ function MainCtrl($rootScope, $scope, socket){
     // Separate the keywords
     var newkeywords = $scope.keywordInput.split(' ');
     // Append all keywords into the original array
-    $scope.keyWords = $scope.keyWords.concat(newkeywords);
+    for (i in newkeywords){
+      var exists = false;
+      for (j in $scope.keyWords){
+        if (newkeywords[i] === $scope.keyWords[j]){
+          exists = true;
+        };
+      }
+      if (exists != true){
+        $scope.keyWords.push(newkeywords[i]);
+        socket.emit('getTweets', {'add': newkeywords[i], 'remove': null});
+      } else {
+        exists = false;
+      };
+    }
 
     // Clear the textbox so users can enter more keywords
     $scope.keywordInput = "";
-    // Send user's keywords to get some tweets!
-    socket.emit('getTweets', $scope.keyWords);
   }
 
   // Remove the keyword
   $scope.removeKeyword = function(word){
     remove($scope.keyWords, word);
     // Send the stop event if there's no keywords
-    if ($scope.keyWords.length == 0){
-      socket.emit('stopStream');
-      return
-    }
-
-    socket.emit('getTweets', $scope.keyWords);
+    socket.emit('getTweets', {'add': null, 'remove': word});
   }
 }
 

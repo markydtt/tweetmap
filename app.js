@@ -40,6 +40,8 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
+var terms = [];
+
 // Single connection per user
 io.sockets.on('connection', function(socket){
   var twit = new twitter({
@@ -49,27 +51,46 @@ io.sockets.on('connection', function(socket){
     access_token_secret: 'ZSIgiBZWzwsQIyWBgfYwTHRKhRpBrrAYsLMOoZDDU'
   });
 
-  // Set the streams scope to allow easy destroying
-  var currentStream = new Object();
-
   // Start the stream
   socket.on('getTweets', function(data){
+    if (data.remove != null){
+      remove(terms, data.remove);
+      if (!terms.length){
+        return
+      };
+    };
+
+    if (data.add != null){
+      terms = terms.concat(data.add);
+    };
+    console.log(terms);
+
     twit.stream('statuses/filter',
       // The terms we want to track (Will be user input)
-      {track: [data]},
+      {track: terms},
       function(stream) {
         stream.on('data', function (data) {
-          currentStream = stream;
           if (data.geo != null){
             console.log('Posted near:' + data.geo.coordinates[0] + ' ' + data.geo.coordinates[0] + ' Tweet:' + data.text);
             io.sockets.emit('newTwitt', data);
-        }
-      });
+          }
+        });
+        stream.on('end', function (response) {
+          console.log("Client disconnected");
+        });
+        stream.on('destroy', function (response) {
+        // Handle a 'silent' disconnection from Twitter, no end/error event fired
+          console.log("Stream Destroyed");
+        });
     });
   });
-
-  // Handle stoping the stream
-  socket.on('stopStream', function(){
-    currentStream.destroy();
-  });
 });
+
+function remove(arr, item) {
+  for(var i = arr.length; i--;) {
+    if(arr[i] === item) {
+      arr.splice(i, 1);
+      return
+    }
+  }
+}
