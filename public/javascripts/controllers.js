@@ -66,6 +66,7 @@ function MainCtrl($rootScope, $scope, socket){
     // Separate the keywords
     var newkeywords = $scope.keywordInput.split(' ');
     // Append all keywords into the original array
+    var unique = [];
     for (i in newkeywords){
       var exists = false;
       for (j in $scope.keyWords){
@@ -75,11 +76,12 @@ function MainCtrl($rootScope, $scope, socket){
       }
       if (exists != true){
         $scope.keyWords.push(newkeywords[i]);
-        socket.emit('getTweets', {'add': newkeywords[i], 'remove': null});
+        unique.push(newkeywords[i]);
       } else {
         exists = false;
       };
     }
+    socket.emit('getTweets', {'add': unique, 'remove': null});
 
     // Clear the textbox so users can enter more keywords
     $scope.keywordInput = "";

@@ -82,6 +82,9 @@ io.sockets.on('connection', function(socket){
         // Handle a 'silent' disconnection from Twitter, no end/error event fired
           console.log("Stream Destroyed");
         });
+        stream.on('error', function(error, code) {
+          console.log("My error: " + error + ": " + code);
+        });
     });
   });
 });
